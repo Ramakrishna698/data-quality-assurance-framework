@@ -42,7 +42,7 @@ If `--alert_topic` is provided, failures are published to Pub/Sub.
 - Use `--soft_fail` to force zero exit code
 
 
-IN A MORE SIMPLE WAY
+# IN A MORE SIMPLE WAY
 # Data Quality Assurance Framework
 
 A Python-based Data Quality Monitoring Framework built for BigQuery.
