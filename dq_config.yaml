@@ -1,0 +1,48 @@
+project_id: YOUR_PROJECT_ID
+monitoring_dataset: monitoring
+results_table: dq_results
+
+tables:
+  - table: raw.erp_orders
+    date_column: _ingest_ts
+    base_where: "TRUE"
+    schema_severity: high
+    schema_required:
+      order_id: STRING
+      customer_id: STRING
+      order_ts: TIMESTAMP
+      order_amount: NUMERIC
+    null_spike:
+      - column: customer_id
+        baseline_days: 7
+        spike_multiplier: 2.0
+        max_allowed_rate: 0.02
+        severity: high
+      - column: order_amount
+        baseline_days: 7
+        spike_multiplier: 1.8
+        max_allowed_rate: 0.01
+        severity: medium
+    freshness:
+      timestamp_column: _ingest_ts
+      max_lag_minutes: 120
+      severity: high
+
+  - table: mart.daily_business_kpis
+    date_column: metric_date
+    base_where: "TRUE"
+    schema_required:
+      metric_date: DATE
+      orders: INT64
+      revenue: NUMERIC
+      run_ts: TIMESTAMP
+    null_spike:
+      - column: revenue
+        baseline_days: 14
+        spike_multiplier: 2.5
+        max_allowed_rate: 0.0
+        severity: medium
+    freshness:
+      timestamp_column: run_ts
+      max_lag_minutes: 1560
+      severity: high
